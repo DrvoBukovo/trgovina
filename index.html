@@ -1,1 +1,582 @@
-<h1>Uskoro</h1>
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ponuda PC komponenti</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #171a21;
+    --panel-2: #1e222b;
+    --border: #2b2f3a;
+    --text: #e8eaed;
+    --text-dim: #9aa0ac;
+    --accent: #4f8cff;
+    --accent-2: #3a6fd6;
+    --ok: #3ecf8e;
+    --danger: #e0e0e0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    padding-bottom: 60px;
+  }
+  header {
+    padding: 28px 16px 20px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, #161922, #0f1115);
+  }
+  header h1 { margin: 0 0 6px; font-size: 1.6rem; }
+  header p { margin: 0; color: var(--text-dim); font-size: 0.95rem; }
+
+  .contact-box {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 18px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .contact-box h2 {
+    margin: 0 0 12px;
+    font-size: 1.05rem;
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+  .contact-fields {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .contact-fields > div { flex: 1 1 240px; }
+  label.small-label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+  input[type="email"], input[type="tel"], input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 0.95rem;
+  }
+  input[type="email"]:focus, input[type="tel"]:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 0 16px; }
+
+  .category {
+    margin-top: 28px;
+  }
+  .category h2 {
+    font-size: 1.15rem;
+    margin: 0 0 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--accent);
+    color: var(--text);
+  }
+  .empty-category {
+    color: var(--text-dim);
+    font-style: italic;
+    font-size: 0.85rem;
+    padding: 8px 0 0;
+  }
+
+  table.items {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  table.items th, table.items td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.92rem;
+  }
+  table.items th {
+    background: var(--panel-2);
+    color: var(--text-dim);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  table.items tr:last-child td { border-bottom: none; }
+  table.items td.num { text-align: right; white-space: nowrap; }
+  table.items td.qty-cell { text-align: center; }
+  .qty-input {
+    width: 64px;
+    padding: 6px 8px;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    text-align: center;
+    font-size: 0.9rem;
+  }
+  .qty-input:focus { outline: none; border-color: var(--accent); }
+  .stock-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+
+  .summary-box {
+    max-width: 900px;
+    margin: 32px auto 0;
+    padding: 18px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .summary-box .total-label { color: var(--text-dim); font-size: 0.9rem; }
+  .summary-box .total-amount { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+
+  .send-box {
+    max-width: 900px;
+    margin: 20px auto 0;
+    padding: 18px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  button.send-btn {
+    width: 100%;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  button.send-btn:hover:not(:disabled) { background: var(--accent-2); }
+  button.send-btn:disabled {
+    background: #33384a;
+    color: #6b7280;
+    cursor: not-allowed;
+  }
+  .hint {
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    text-align: center;
+  }
+  .status-msg {
+    margin-top: 10px;
+    font-size: 0.85rem;
+    text-align: center;
+  }
+  .status-msg.ok { color: var(--ok); }
+
+  .loading, .error-msg {
+    text-align: center;
+    color: var(--text-dim);
+    padding: 40px 16px;
+  }
+  .error-msg { color: #e06666; }
+
+  footer {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.78rem;
+    margin-top: 40px;
+    padding: 0 16px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Ponuda PC komponenti</h1>
+  <p>Odaberi količine i pošalji upit — javit ćemo se s potvrdom i uputama za preuzimanje/dostavu.</p>
+</header>
+
+<div class="contact-box">
+  <h2>Tvoji podaci</h2>
+  <div class="contact-fields">
+    <div>
+      <label class="small-label" for="email-top">Email adresa</label>
+      <input type="email" id="email-top" placeholder="ime@email.com">
+    </div>
+    <div>
+      <label class="small-label" for="phone-top">Broj telefona</label>
+      <input type="tel" id="phone-top" placeholder="+385 91 234 5678">
+    </div>
+  </div>
+</div>
+
+<div class="container" id="catalog">
+  <div class="loading" id="loading-msg">Učitavam ponudu…</div>
+</div>
+
+<div class="summary-box">
+  <div class="total-label">Ukupno za odabrane stavke</div>
+  <div class="total-amount" id="total-amount">0.00 €</div>
+</div>
+
+<div class="send-box">
+  <h2 style="margin:0 0 12px; font-size:1.05rem; color:var(--text-dim); font-weight:600;">Pošalji upit</h2>
+  <div class="contact-fields" style="margin-bottom:14px;">
+    <div>
+      <label class="small-label" for="email-bottom">Email adresa</label>
+      <input type="email" id="email-bottom" placeholder="ime@email.com">
+    </div>
+    <div>
+      <label class="small-label" for="phone-bottom">Broj telefona</label>
+      <input type="tel" id="phone-bottom" placeholder="+385 91 234 5678">
+    </div>
+  </div>
+  <button class="send-btn" id="send-btn" disabled>Pošalji upit</button>
+  <p class="hint">Gumb postaje aktivan kad odabereš barem jednu stavku i uneseš email ili broj telefona. Upit se šalje direktno, bez otvaranja tvog email programa.</p>
+  <div class="status-msg" id="status-msg"></div>
+</div>
+
+<footer>Podaci se automatski učitavaju iz products.csv</footer>
+
+<script>
+const CATEGORY_ORDER = [
+  "Matične ploče",
+  "Memorije",
+  "Procesori",
+  "Diskovi",
+  "Napajanja",
+  "Grafičke Kartice",
+  "PCIe kartice",
+  "Adapteri",
+  "Kablovi",
+  "Ostalo"
+];
+
+const RECIPIENT_EMAIL = "trgovac@gmail.com";
+
+// ⚠️ VAŽNO — PRIJE OBJAVE STRANICE MORAŠ OVO ZAMIJENITI:
+// Idi na https://formspree.io, registriraj se besplatno s email adresom trgovac@gmail.com,
+// napravi novi "Form", i zalijepi ovdje njegov endpoint (izgleda kao "https://formspree.io/f/xxxxabcd").
+// Bez ovog koraka gumb "Pošalji upit" neće raditi.
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mnpndylp";
+
+// --- Jednostavan CSV parser (podržava navodnike i zareze unutar polja) ---
+function parseCSV(text) {
+  const rows = [];
+  let row = [];
+  let field = "";
+  let inQuotes = false;
+  // normaliziraj line-endinge
+  text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (text[i + 1] === '"') { field += '"'; i++; }
+        else { inQuotes = false; }
+      } else {
+        field += c;
+      }
+    } else {
+      if (c === '"') { inQuotes = true; }
+      else if (c === ',') { row.push(field); field = ""; }
+      else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ""; }
+      else { field += c; }
+    }
+  }
+  if (field.length > 0 || row.length > 0) { row.push(field); rows.push(row); }
+  return rows.filter(r => r.length > 1 || (r.length === 1 && r[0].trim() !== ""));
+}
+
+function csvToObjects(text) {
+  const rows = parseCSV(text);
+  if (rows.length === 0) return [];
+  const headers = rows[0].map(h => h.trim());
+  return rows.slice(1).map(r => {
+    const obj = {};
+    headers.forEach((h, idx) => { obj[h] = (r[idx] !== undefined ? r[idx].trim() : ""); });
+    return obj;
+  });
+}
+
+function fmtMoney(n) {
+  return n.toLocaleString('hr-HR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " €";
+}
+
+let cart = {}; // key: opis+kategorija -> {qty, item}
+
+function updateTotal() {
+  let total = 0;
+  Object.values(cart).forEach(({ qty, item }) => {
+    if (qty > 0) total += qty * item.cijena;
+  });
+  document.getElementById('total-amount').textContent = fmtMoney(total);
+  updateSendButtonState();
+}
+
+function updateSendButtonState() {
+  const hasItems = Object.values(cart).some(({ qty }) => qty > 0);
+  const emailTop = document.getElementById('email-top').value.trim();
+  const phoneTop = document.getElementById('phone-top').value.trim();
+  const emailBottom = document.getElementById('email-bottom').value.trim();
+  const phoneBottom = document.getElementById('phone-bottom').value.trim();
+  const hasContact = emailTop || phoneTop || emailBottom || phoneBottom;
+  document.getElementById('send-btn').disabled = !(hasItems && hasContact);
+}
+
+function syncContactFields(sourceId, targets) {
+  document.getElementById(sourceId).addEventListener('input', (e) => {
+    targets.forEach(id => { document.getElementById(id).value = e.target.value; });
+    updateSendButtonState();
+  });
+}
+
+function render(items) {
+  const container = document.getElementById('catalog');
+  container.innerHTML = "";
+
+  const byCategory = {};
+  items.forEach(item => {
+    const cat = item.kategorija || "Ostalo";
+    if (!byCategory[cat]) byCategory[cat] = [];
+    byCategory[cat].push(item);
+  });
+
+  CATEGORY_ORDER.forEach(cat => {
+    const catItems = (byCategory[cat] || []).slice().sort((a, b) =>
+      a.opis.localeCompare(b.opis, 'hr', { sensitivity: 'base' })
+    );
+
+    const section = document.createElement('div');
+    section.className = 'category';
+
+    const h2 = document.createElement('h2');
+    h2.textContent = cat;
+    section.appendChild(h2);
+
+    if (catItems.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'empty-category';
+      empty.textContent = 'Trenutno nema ponude u ovoj kategoriji.';
+      section.appendChild(empty);
+      container.appendChild(section);
+      return;
+    }
+
+    const table = document.createElement('table');
+    table.className = 'items';
+    table.innerHTML = `
+      <thead>
+        <tr>
+          <th>Opis</th>
+          <th>Proizvođač</th>
+          <th>Stanje</th>
+          <th class="num">Cijena</th>
+          <th class="num">Dostupno</th>
+          <th style="text-align:center;">Količina</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    `;
+    const tbody = table.querySelector('tbody');
+
+    catItems.forEach((item, idx) => {
+      const key = cat + '||' + item.opis + '||' + idx;
+      cart[key] = { qty: 0, item };
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${escapeHtml(item.opis)}</td>
+        <td>${escapeHtml(item.proizvodjac)}</td>
+        <td><span class="stock-badge">${escapeHtml(item.stanje)}</span></td>
+        <td class="num">${fmtMoney(item.cijena)}</td>
+        <td class="num">${item.brojKomada}</td>
+        <td class="qty-cell">
+          <input type="number" class="qty-input" min="0" max="${item.brojKomada}" value="0" data-key="${key}">
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    section.appendChild(table);
+    container.appendChild(section);
+  });
+
+  // qty listeners
+  container.querySelectorAll('.qty-input').forEach(input => {
+    input.addEventListener('input', () => {
+      const key = input.dataset.key;
+      let val = parseInt(input.value, 10);
+      const max = cart[key].item.brojKomada;
+      if (isNaN(val) || val < 0) val = 0;
+      if (val > max) val = max;
+      input.value = val;
+      cart[key].qty = val;
+      updateTotal();
+    });
+  });
+
+  updateTotal();
+}
+
+function escapeHtml(str) {
+  if (str === undefined || str === null) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function buildOrderText() {
+  const emailTop = document.getElementById('email-top').value.trim();
+  const phoneTop = document.getElementById('phone-top').value.trim();
+  const emailBottom = document.getElementById('email-bottom').value.trim();
+  const phoneBottom = document.getElementById('phone-bottom').value.trim();
+  const email = emailTop || emailBottom || "(nije uneseno)";
+  const phone = phoneTop || phoneBottom || "(nije uneseno)";
+
+  let lines = [];
+  lines.push("UPIT ZA KUPNJU");
+  lines.push("");
+  lines.push("Email kupca: " + email);
+  lines.push("Telefon kupca: " + phone);
+  lines.push("");
+  lines.push("Odabrane stavke:");
+  lines.push("");
+
+  let total = 0;
+  CATEGORY_ORDER.forEach(cat => {
+    const catEntries = Object.values(cart).filter(c => c.item.kategorija === cat && c.qty > 0);
+    if (catEntries.length === 0) return;
+    lines.push("== " + cat + " ==");
+    catEntries
+      .sort((a, b) => a.item.opis.localeCompare(b.item.opis, 'hr'))
+      .forEach(({ qty, item }) => {
+        const lineTotal = qty * item.cijena;
+        total += lineTotal;
+        lines.push(`- ${item.opis} | ${item.proizvodjac} | ${item.stanje} | kom: ${qty} x ${fmtMoney(item.cijena)} = ${fmtMoney(lineTotal)}`);
+      });
+    lines.push("");
+  });
+
+  lines.push("UKUPNO: " + fmtMoney(total));
+
+  return lines.join("\n");
+}
+
+async function sendOrder() {
+  const statusEl = document.getElementById('status-msg');
+  const btn = document.getElementById('send-btn');
+
+  if (FORMSPREE_ENDPOINT.includes('YOUR_FORM_ID')) {
+    statusEl.textContent = "Stranica još nije podešena za slanje (nedostaje Formspree endpoint). Kontaktiraj prodavača izravno na " + RECIPIENT_EMAIL + ".";
+    statusEl.className = "status-msg";
+    statusEl.style.color = "#e06666";
+    return;
+  }
+
+  const emailTop = document.getElementById('email-top').value.trim();
+  const phoneTop = document.getElementById('phone-top').value.trim();
+  const emailBottom = document.getElementById('email-bottom').value.trim();
+  const phoneBottom = document.getElementById('phone-bottom').value.trim();
+  const email = emailTop || emailBottom || "";
+  const phone = phoneTop || phoneBottom || "";
+  const body = buildOrderText();
+
+  btn.disabled = true;
+  statusEl.style.color = "";
+  statusEl.className = "status-msg";
+  statusEl.textContent = "Šaljem upit…";
+
+  try {
+    const res = await fetch(FORMSPREE_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email || "(nije uneseno)",
+        telefon: phone || "(nije uneseno)",
+        subject: "Upit za kupnju PC komponenti",
+        poruka: body
+      })
+    });
+
+    if (res.ok) {
+      statusEl.textContent = "Upit je uspješno poslan! Javit ćemo se uskoro.";
+      statusEl.className = "status-msg ok";
+      // resetiraj količine i kontakt polja nakon uspješnog slanja
+      Object.keys(cart).forEach(key => { cart[key].qty = 0; });
+      document.querySelectorAll('.qty-input').forEach(input => { input.value = 0; });
+      ['email-top', 'phone-top', 'email-bottom', 'phone-bottom'].forEach(id => {
+        document.getElementById(id).value = "";
+      });
+      updateTotal();
+    } else {
+      throw new Error('Server je vratio grešku (status ' + res.status + ')');
+    }
+  } catch (err) {
+    statusEl.textContent = "Greška pri slanju upita. Pokušaj ponovno ili kontaktiraj izravno na " + RECIPIENT_EMAIL + ".";
+    statusEl.style.color = "#e06666";
+    console.error(err);
+  } finally {
+    updateSendButtonState();
+  }
+}
+
+// --- Init ---
+async function init() {
+  try {
+    const res = await fetch('products.csv', { cache: 'no-store' });
+    if (!res.ok) throw new Error('Ne mogu učitati products.csv (status ' + res.status + ')');
+    const text = await res.text();
+    const raw = csvToObjects(text);
+
+    const items = raw
+      .map(r => ({
+        kategorija: r['Kategorija'] || '',
+        opis: r['Opis'] || '',
+        proizvodjac: r['Proizvođač'] || r['Proizvodac'] || '',
+        stanje: r['Stanje'] || '',
+        brojKomada: parseInt(r['Broj komada'], 10) || 0,
+        cijena: parseFloat((r['Cijena (EUR)'] || r['Cijena'] || '0').toString().replace(',', '.')) || 0
+      }))
+      .filter(item => item.opis.trim() !== '' && item.brojKomada > 0);
+
+    render(items);
+  } catch (err) {
+    document.getElementById('catalog').innerHTML =
+      `<div class="error-msg">Greška pri učitavanju ponude: ${escapeHtml(err.message)}</div>`;
+    console.error(err);
+  }
+}
+
+document.getElementById('email-top').addEventListener('input', updateSendButtonState);
+document.getElementById('phone-top').addEventListener('input', updateSendButtonState);
+document.getElementById('email-bottom').addEventListener('input', updateSendButtonState);
+document.getElementById('phone-bottom').addEventListener('input', updateSendButtonState);
+document.getElementById('send-btn').addEventListener('click', sendOrder);
+
+init();
+</script>
+
+</body>
+</html>
+
