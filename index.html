@@ -61,7 +61,7 @@
     color: var(--text-dim);
     margin-bottom: 4px;
   }
-  input[type="email"], input[type="tel"], input[type="text"] {
+  input[type="email"], input[type="tel"], input[type="text"], textarea {
     width: 100%;
     padding: 10px 12px;
     background: var(--panel-2);
@@ -69,8 +69,10 @@
     border-radius: 8px;
     color: var(--text);
     font-size: 0.95rem;
+    font-family: inherit;
+    resize: vertical;
   }
-  input[type="email"]:focus, input[type="tel"]:focus {
+  input[type="email"]:focus, input[type="tel"]:focus, textarea:focus {
     outline: none;
     border-color: var(--accent);
   }
@@ -118,6 +120,7 @@
   }
   table.items tr:last-child td { border-bottom: none; }
   table.items td.num { text-align: right; white-space: nowrap; }
+  table.items th.num { text-align: right; }
   table.items td.qty-cell { text-align: center; }
   .qty-input {
     width: 64px;
@@ -214,20 +217,6 @@
   <p>Odaberi količine i pošalji upit — javit ćemo se s potvrdom i uputama za preuzimanje/dostavu.</p>
 </header>
 
-<div class="contact-box">
-  <h2>Tvoji podaci</h2>
-  <div class="contact-fields">
-    <div>
-      <label class="small-label" for="email-top">Email adresa</label>
-      <input type="email" id="email-top" placeholder="ime@email.com">
-    </div>
-    <div>
-      <label class="small-label" for="phone-top">Broj telefona</label>
-      <input type="tel" id="phone-top" placeholder="+385 91 234 5678">
-    </div>
-  </div>
-</div>
-
 <div class="container" id="catalog">
   <div class="loading" id="loading-msg">Učitavam ponudu…</div>
 </div>
@@ -248,6 +237,10 @@
       <label class="small-label" for="phone-bottom">Broj telefona</label>
       <input type="tel" id="phone-bottom" placeholder="+385 91 234 5678">
     </div>
+  </div>
+  <div style="margin-bottom:14px;">
+    <label class="small-label" for="message-bottom">Poruka (opcionalno)</label>
+    <textarea id="message-bottom" placeholder="Napiši ovdje eventualnu poruku ili pitanje…" rows="4"></textarea>
   </div>
   <button class="send-btn" id="send-btn" disabled>Pošalji upit</button>
   <p class="hint">Gumb postaje aktivan kad odabereš barem jednu stavku i uneseš email ili broj telefona. Upit se šalje direktno, bez otvaranja tvog email programa.</p>
@@ -341,11 +334,9 @@ function updateTotal() {
 
 function updateSendButtonState() {
   const hasItems = Object.values(cart).some(({ qty }) => qty > 0);
-  const emailTop = document.getElementById('email-top').value.trim();
-  const phoneTop = document.getElementById('phone-top').value.trim();
   const emailBottom = document.getElementById('email-bottom').value.trim();
   const phoneBottom = document.getElementById('phone-bottom').value.trim();
-  const hasContact = emailTop || phoneTop || emailBottom || phoneBottom;
+  const hasContact = emailBottom || phoneBottom;
   document.getElementById('send-btn').disabled = !(hasItems && hasContact);
 }
 
@@ -454,18 +445,18 @@ function escapeHtml(str) {
 }
 
 function buildOrderText() {
-  const emailTop = document.getElementById('email-top').value.trim();
-  const phoneTop = document.getElementById('phone-top').value.trim();
-  const emailBottom = document.getElementById('email-bottom').value.trim();
-  const phoneBottom = document.getElementById('phone-bottom').value.trim();
-  const email = emailTop || emailBottom || "(nije uneseno)";
-  const phone = phoneTop || phoneBottom || "(nije uneseno)";
+  const email = document.getElementById('email-bottom').value.trim() || "(nije uneseno)";
+  const phone = document.getElementById('phone-bottom').value.trim() || "(nije uneseno)";
+  const message = document.getElementById('message-bottom').value.trim();
 
   let lines = [];
   lines.push("UPIT ZA KUPNJU");
   lines.push("");
   lines.push("Email kupca: " + email);
   lines.push("Telefon kupca: " + phone);
+  if (message) {
+    lines.push("Poruka kupca: " + message);
+  }
   lines.push("");
   lines.push("Odabrane stavke:");
   lines.push("");
@@ -501,12 +492,8 @@ async function sendOrder() {
     return;
   }
 
-  const emailTop = document.getElementById('email-top').value.trim();
-  const phoneTop = document.getElementById('phone-top').value.trim();
-  const emailBottom = document.getElementById('email-bottom').value.trim();
-  const phoneBottom = document.getElementById('phone-bottom').value.trim();
-  const email = emailTop || emailBottom || "";
-  const phone = phoneTop || phoneBottom || "";
+  const email = document.getElementById('email-bottom').value.trim();
+  const phone = document.getElementById('phone-bottom').value.trim();
   const body = buildOrderText();
 
   btn.disabled = true;
@@ -532,7 +519,7 @@ async function sendOrder() {
       // resetiraj količine i kontakt polja nakon uspješnog slanja
       Object.keys(cart).forEach(key => { cart[key].qty = 0; });
       document.querySelectorAll('.qty-input').forEach(input => { input.value = 0; });
-      ['email-top', 'phone-top', 'email-bottom', 'phone-bottom'].forEach(id => {
+      ['email-bottom', 'phone-bottom', 'message-bottom'].forEach(id => {
         document.getElementById(id).value = "";
       });
       updateTotal();
@@ -575,8 +562,6 @@ async function init() {
   }
 }
 
-document.getElementById('email-top').addEventListener('input', updateSendButtonState);
-document.getElementById('phone-top').addEventListener('input', updateSendButtonState);
 document.getElementById('email-bottom').addEventListener('input', updateSendButtonState);
 document.getElementById('phone-bottom').addEventListener('input', updateSendButtonState);
 document.getElementById('send-btn').addEventListener('click', sendOrder);
