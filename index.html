@@ -276,10 +276,21 @@ const RECIPIENT_EMAIL = "trgovac@gmail.com";
 // Idi na https://formspree.io, registriraj se besplatno s email adresom trgovac@gmail.com,
 // napravi novi "Form", i zalijepi ovdje njegov endpoint (izgleda kao "https://formspree.io/f/xxxxabcd").
 // Bez ovog koraka gumb "Pošalji upit" neće raditi.
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/mnpndylp";
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
 
-// --- Jednostavan CSV parser (podržava navodnike i zareze unutar polja) ---
+// --- Jednostavan CSV parser (podržava navodnike, zareze unutar polja, i auto-prepoznaje razdjelnik , ili ;) ---
+function detectDelimiter(text) {
+  const firstLine = text.split(/\r\n|\r|\n/)[0] || "";
+  const commaCount = (firstLine.match(/,/g) || []).length;
+  const semicolonCount = (firstLine.match(/;/g) || []).length;
+  return semicolonCount > commaCount ? ';' : ',';
+}
+
 function parseCSV(text) {
+  // ukloni UTF-8 BOM ako postoji (Excel ga dodaje kod "CSV UTF-8" izvoza)
+  if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+
+  const delimiter = detectDelimiter(text);
   const rows = [];
   let row = [];
   let field = "";
@@ -297,7 +308,7 @@ function parseCSV(text) {
       }
     } else {
       if (c === '"') { inQuotes = true; }
-      else if (c === ',') { row.push(field); field = ""; }
+      else if (c === delimiter) { row.push(field); field = ""; }
       else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ""; }
       else { field += c; }
     }
@@ -579,4 +590,3 @@ init();
 
 </body>
 </html>
-
