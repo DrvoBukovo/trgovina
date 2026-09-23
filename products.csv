@@ -1,11 +1,25 @@
 ﻿Kategorija;Opis;Proizvođač;Stanje;Broj komada;Cijena (EUR)
 Matične ploče;B760M-H DDR4;Gigabyte;Novo;2;50,00
 Matične ploče;B760M-H DDR4;Gigabyte;Korišteno;1;30,00
-Memorije;DIMM DDR4 @2400 8GB;Kenbona;Korišteno;3;10,00
-Memorije;DIMM DDR4 @2400 8GB;Kingston;Korišteno;2;10,00
+;;;;;
+Memorije;DIMM DDR4 @2400 8GB;Kenbona;Korišteno;25;10,00
+Memorije;DIMM DDR4 @2400 8GB;Kingston;Korišteno;6;10,00
+Memorije;DIMM DDR4 @2400 8GB;Crucial;Korišteno;4;10,00
+Memorije;DIMM DDR4 @2400 4GB;Kingston;Korišteno;8;8,00
+Memorije;DIMM DDR4 @3200 8GB;Kenbona;Korišteno;1;10,00
+Memorije;DIMM DDR4 @3200 8GB;Silicon Power;Korišteno;1;10,00
+Memorije;DIMM DDR4 @2133 4GB;Kingston;Korišteno;6;8,00
+Memorije;DIMM DDR4 @2400 4GB;Crucial;Korišteno;2;8,00
+Memorije;DIMM DDR4 @3200 8GB;Yansen (Hynix);Korišteno;14;10,00
+Memorije;SO-DIMM DDR4 8GB;Hoodisk;Korišteno;9;20,00
+Memorije;SO-DIMM DDR4 4GB;Crucial;Korišteno;3;10,00
+;;;;;
 Procesori;i3-12100;Intel;Korišteno;10;50,00
 Procesori;G6900 Celeron;Intel;Korišteno;3;25,00
 ;;;;;
+Ostalo;L9i Hladnjak za LGA1700;Noctua;Novo;10;30,00
+;;;;;
+Diskovi;M.2 NVMe 128GB;Yansen;Novo;5;10,00
 ;;;;;
 ;;;;;
 ;;;;;
